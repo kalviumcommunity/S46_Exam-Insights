@@ -1,0 +1,12 @@
+{
+  "name": "s46_exam-insights",
+  "version": "1.0.0",
+  "description": "> **\"Obvious thoughts before exam nights!\"**",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
