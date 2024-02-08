@@ -1,16 +1,16 @@
 # Exam Insights
 
-## [Deployed Link](https://exam-insights.onrender.com)
+### [Deployed Link](https://exam-insights.onrender.com)
 
 > **"Obvious thoughts before exam nights!"**
 
 
-### Idea
+### **Idea**
 
 The project aims to explore the different beliefs, ideas and tricks students often come across before exam nights. This will help users understand and navigate the realities of such experiences during exam time preparations.
 
 
-### Features
+### **Features**
 - List of thoughts that come to mind before exam nights.
 - The fact behind every thought with pictorial description.
 - A mobile Responsive project.
