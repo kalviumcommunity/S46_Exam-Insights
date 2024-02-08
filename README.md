@@ -1,5 +1,7 @@
 # Exam Insights
 
+## [Deployed Link](https://exam-insights.onrender.com)
+
 > **"Obvious thoughts before exam nights!"**
 
 
