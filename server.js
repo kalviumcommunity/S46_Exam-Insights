@@ -1,12 +1,17 @@
 const express = require('express');
+const {connectToDB, isConnected} = require("./db.js");
 const app = express();
 const port = 3000;
 
-app.get('/ping', (req, res)=>{
-  res.json({message:'pong'})
+app.get('/', (req, res) => {
+  res.json({
+    message: 'pong',
+    database: isConnected() ? 'connected' : 'not connected'
+  })
 })
 
-app.listen(port, () => {
-    console.log(`🚀 server running on PORT: ${port}`);
+app.listen(port, async () => {
+  await connectToDB();  
+  console.log(`🚀 server running on PORT: ${port}`);
 });
 
