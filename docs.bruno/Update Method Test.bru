@@ -1,0 +1,17 @@
+meta {
+  name: Update Method Test
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://localhost:3000/posts/65fa79ff2cea8a9dc2307785
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "element":"Searching Previous Year Question Papers"
+  }
+}

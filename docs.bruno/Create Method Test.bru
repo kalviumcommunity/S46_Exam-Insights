@@ -1,0 +1,21 @@
+meta {
+  name: Create Method Test
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/posts
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+     "element": "Aaryan",
+          "category": "Demo",
+          "expectation": "Test",
+          "postedBy": "Aaryan",
+          "imageLink": "xxx"
+  }
+}
