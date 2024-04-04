@@ -1,6 +1,9 @@
 # Exam Insights
 
-### [Deployed Link](https://exam-insights.onrender.com)
+### [Frontend Deployed Link](https://examinsights.netlify.app/)
+
+### [Backend Deployed Link](https://exam-insights.onrender.com)
+
 
 > **"Obvious thoughts before exam nights!"**
 
