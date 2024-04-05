@@ -7,13 +7,13 @@ function Post() {
   return (
     <div id="gallery">
       <div className="card"></div>
-      <div class="bg">
+      <div className="bg">
         <p id="title">Searching Previous Year Question Papers</p>
         <div id="creator">
           - <span>Aaryan Panda</span>
         </div>
         <div id="img-con">
-          <img id="post-img" src={demo} alt="" />
+          <img id="post-img" src={demo} alt="demo" />
         </div>
         <div id="quote">
           <p>
@@ -36,7 +36,7 @@ function Post() {
         </div>
         <div id="flex-con">
           <div id="like-con">
-            <img id="like" src={like} alt="" />
+            <img id="like" src={like} alt="like" />
             <span>10</span>
           </div>
         </div>
