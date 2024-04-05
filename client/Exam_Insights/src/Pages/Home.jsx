@@ -1,9 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Home.css";
 import Navbar from "../Components/Navbar";
 import Post from "../Components/Post";
+import axios from "axios";
 
 function Home() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(import.meta.env.VITE_API_URL + "posts")
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -23,7 +37,15 @@ function Home() {
           Create Post
         </button>
       </div>
-      <Post />
+      <div className="postContainer">
+      {
+        data && data.map((post)=>{
+          return (
+            <Post key={post._id} {...post} />
+          )
+        })
+      }
+      </div>
     </>
   );
 }
