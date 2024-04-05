@@ -38,13 +38,11 @@ function Home() {
         </button>
       </div>
       <div className="postContainer">
-      {
-        data && data.map((post)=>{
+        {data && data.map((post) => {
           return (
             <Post key={post._id} {...post} />
-          )
-        })
-      }
+          );
+        })}
       </div>
     </>
   );
