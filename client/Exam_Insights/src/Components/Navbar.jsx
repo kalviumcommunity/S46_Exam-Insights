@@ -5,7 +5,6 @@ import change from "../assets/change.png";
 import logout from "../assets/logout.png";
 import del from "../assets/delete.png";
 import { useState } from "react";
-import { useEffect } from "react";
 
 function Navbar() {
   const [account, setShowAccount] = useState(false);
