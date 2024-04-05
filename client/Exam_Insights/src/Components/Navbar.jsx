@@ -4,14 +4,37 @@ import logo2 from "../assets/Asap_Logo2.png";
 import change from "../assets/change.png";
 import logout from "../assets/logout.png";
 import del from "../assets/delete.png";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 function Navbar() {
   const [account, setShowAccount] = useState(false);
+  const accountRef = useRef(null);
 
+  // Function to toggle account popup
   const toggleAccount = () => {
-    setShowAccount(!account);
+    setShowAccount(!account); 
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+    
+      if (accountRef.current && !accountRef.current.contains(event.target)) {
+        setShowAccount(false); 
+      }
+    };
+
+    const handleScroll = () => {
+      setShowAccount(false); 
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", handleScroll); 
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [account]);
 
 
   return (
@@ -39,7 +62,7 @@ function Navbar() {
         </div>
       </div>
       {account && (
-        <div id="account">
+        <div id="account" ref={accountRef}>
           <div id="top">
             <p id="name">User</p>
             <p id="email">trial@email.com</p>

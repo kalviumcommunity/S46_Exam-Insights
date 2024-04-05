@@ -74,6 +74,7 @@
 }   
 
 #account {
+    z-index: 10;
     border-radius: 12px;
     height: 280px;
     width: 250px;

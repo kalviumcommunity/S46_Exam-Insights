@@ -1,7 +1,7 @@
 import React from "react";
 import "./Post.css";
-import demo from "../assets/demo-image.png";
 import like from "../assets/Like.png";
+import { useState, useEffect } from 'react';
 
 function Post({
   category,
@@ -13,6 +13,30 @@ function Post({
   quote,
   _id}
 ) {
+
+
+  const [rotate, setRotate] = useState(false);
+
+  // Function to toggle rotation
+  const toggleRotation = () => {
+    if (!rotate) {
+      setRotate(true); 
+    }
+  };
+
+  useEffect(() => {
+    let timeoutId;
+    if (rotate) {
+      timeoutId = setTimeout(() => setRotate(false), 500); 
+    }
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [rotate]); 
+
+
+
+
   return (
     <div id="gallery">
       <div className="card"></div>
@@ -34,17 +58,19 @@ function Post({
           </p>
         </div>
         <div id="expect">
-          <p>Expectation : </p>
-          <span>{expectation}</span>
+          <p className="line1">Expectation</p>
+          <p className="line2">:</p>
+          <p className="line3">{expectation}</p>
         </div>
 
         <div id="cat">
-          <p>Category : &nbsp; </p>
-          <span>{category}</span>
+          <p className="line1">Category</p>
+          <p className="line2">:</p>
+          <p className="line3">{category}</p>
         </div>
         <div id="flex-con">
-          <div id="like-con">
-            <img id="like" src={like} alt="like" />
+          <div id="like-con" onClick={toggleRotation}>
+            <img className={rotate ? 'rotate' : ''} id="like" src={like} alt="like" />
             <span>{likes}</span>
           </div>
         </div>
