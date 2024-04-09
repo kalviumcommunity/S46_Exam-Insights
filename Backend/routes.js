@@ -73,7 +73,8 @@ router.post('/posts', async (req, res) => {
         category: req.body.category,
         expectation: req.body.expectation,
         postedBy: req.body.postedBy,
-        imageLink: req.body.imageLink
+        imageLink: req.body.imageLink,
+        quote: req.body.quote
     });
 
     try {
@@ -114,6 +115,7 @@ router.patch('/posts/:id', async (req, res) => {
         post.expectation = req.body.expectation || post.expectation;
         post.postedBy = req.body.postedBy || post.postedBy;
         post.imageLink = req.body.imageLink || post.imageLink;
+        post.quote = req.body.quote || post.quote;
 
         const updatedPost = await post.save();
         res.json(updatedPost);
