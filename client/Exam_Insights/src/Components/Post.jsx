@@ -1,7 +1,9 @@
 import React from "react";
 import "./Post.css";
 import like from "../assets/Like.png";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from 'axios'
 
 function Post({
   category,
@@ -11,30 +13,37 @@ function Post({
   likes,
   postedBy,
   quote,
-  _id}
-) {
-
+  _id,
+}) {
+  
 
   const [rotate, setRotate] = useState(false);
 
   // Function to toggle rotation
   const toggleRotation = () => {
     if (!rotate) {
-      setRotate(true); 
+      setRotate(true);
     }
   };
 
   useEffect(() => {
     let timeoutId;
     if (rotate) {
-      timeoutId = setTimeout(() => setRotate(false), 500); 
+      timeoutId = setTimeout(() => setRotate(false), 500);
     }
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [rotate]); 
+  }, [rotate]);
 
 
+
+  // Delete button
+  const handleDelete = (id) => {
+    axios.delete(import.meta.env.VITE_API_URL+ "posts/" + id)
+    .then(() => window.location.reload())
+    .catch(err => console.log(err))
+  }
 
 
   return (
@@ -50,11 +59,7 @@ function Post({
         </div>
         <div id="quote">
           <p>
-            "{" "}
-            <span>
-              {quote}
-            </span>{" "}
-            "
+            " <span>{quote}</span> "
           </p>
         </div>
         <div id="expect">
@@ -68,9 +73,21 @@ function Post({
           <p className="line2">:</p>
           <p className="line3">{category}</p>
         </div>
+
+        <div id="up-del-butts">
+          <Link to={`/posts/${_id}`}>
+            <button id="up">Update</button>
+          </Link>
+            <button id="del" onClick={() => handleDelete(_id)}>Delete</button>
+        </div>
         <div id="flex-con">
           <div id="like-con" onClick={toggleRotation}>
-            <img className={rotate ? 'rotate' : ''} id="like" src={like} alt="like" />
+            <img
+              className={rotate ? "rotate" : ""}
+              id="like"
+              src={like}
+              alt="like"
+            />
             <span>{likes}</span>
           </div>
         </div>

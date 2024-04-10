@@ -193,3 +193,38 @@
         transform: rotate(360deg);
     }
 }
+
+#up-del-butts {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+#up,
+#del {
+    padding: 4px 8px;
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 5px;
+    color: rgb(249, 249, 249);
+    cursor: pointer;
+    margin: 6px;
+    letter-spacing: 1px;
+    box-shadow: 2px 3px 2px #000000;
+    transition: box-shadow 0.3s;
+}
+
+#up {
+    background-color: #1d2f79;
+    border: 2px solid #1d2f79;
+}
+
+#del {
+    background-color: #b20000;
+    border: 2px solid #b20000;
+}
+
+#up:active,
+#del:active {
+    box-shadow: inset 1px 2px 4px rgba(0, 0, 0, 1);
+}
