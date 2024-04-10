@@ -4,7 +4,6 @@ import axios from "axios";
 import "./CreatePost.css";
 import logo from "../assets/Asap_Logo.png";
 
-
 function CreatePost() {
   const [element, setElement] = useState("");
   const [imageLink, setImageLink] = useState("");
@@ -17,17 +16,17 @@ function CreatePost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios
-        .post(import.meta.env.VITE_API_URL + "posts", {
+      const response = await axios.post(
+        import.meta.env.VITE_API_URL + "posts",
+        {
           element,
           imageLink,
           expectation,
           category,
           quote,
-        })
-        .then(() => {
-          nav("/");
-        });
+        }
+      );
+      nav("/");
     } catch (error) {
       console.log(error);
     }
@@ -40,7 +39,9 @@ function CreatePost() {
   return (
     <>
       <div id="container">
-        <img id="logo" src={logo} alt="" />
+        <Link to="/">
+          <img id="logo" src={logo} alt="red" onClick={handleClick} />
+        </Link>
         <div id="form">
           <div id="form-head">
             <span>Create Your Own Post!</span>
