@@ -16,6 +16,9 @@ const postSchema = new mongoose.Schema({
     },
     imageLink: {
         type: String,
+    },
+    quote: {
+        type: String,
     }
 })
 
