@@ -8,9 +8,9 @@ function UpdatePost() {
   const { id } = useParams();
   const [element, setElement] = useState("");
   const [imageLink, setImageLink] = useState("");
-  const [expectation, setExpectation] = useState("");
-  const [category, setCategory] = useState("");
-  const [quote, setQuote] = useState("");
+  const [expectation, setExpectation] = useState();
+  const [category, setCategory] = useState();
+  const [quote, setQuote] = useState();
 
   const nav = useNavigate();
 
