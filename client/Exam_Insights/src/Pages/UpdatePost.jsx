@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import "./UpdatePost.css";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import "./CreatePost.css";
 import logo from "../assets/Asap_Logo.png";
 
-function CreatePost() {
+function UpdatePost() {
+  const { id } = useParams();
   const [element, setElement] = useState("");
   const [imageLink, setImageLink] = useState("");
   const [expectation, setExpectation] = useState("");
@@ -13,23 +14,37 @@ function CreatePost() {
 
   const nav = useNavigate();
 
-  const handleSubmit = async (e) => {
+  useEffect(() => {
+    axios
+      .get(import.meta.env.VITE_API_URL + "posts/" + id)
+      .then((post) => {
+        setElement(post.data.element);
+        setImageLink(post.data.imageLink);
+        setExpectation(post.data.expectation);
+        setCategory(post.data.category);
+        setQuote(post.data.quote);
+      })
+      .catch((err) => {
+        console.log("axios fail");
+      });
+  }, [id]);
+
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        import.meta.env.VITE_API_URL + "posts",
-        {
-          element,
-          imageLink,
-          expectation,
-          category,
-          quote,
-        }
-      );
-      nav("/");
-    } catch (error) {
-      console.log(error);
-    }
+    axios
+      .patch(import.meta.env.VITE_API_URL + "posts/" + id, {
+        element,
+        imageLink,
+        expectation,
+        category,
+        quote,
+      })
+      .then(() => {
+        nav("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleClick = () => {
@@ -42,16 +57,16 @@ function CreatePost() {
         <Link to="/">
           <img id="logo" src={logo} alt="red" onClick={handleClick} />
         </Link>
-        <div className="form">
+        <div className="form border" >
           <div id="form-head">
-            <span>Create Your Own Post!</span>
+            <span>Update Your Post!</span>
           </div>
 
-          <div>
+          <div className="body">
             <div className="input">
-              <label className="input__label">Post Title</label>
+              <label className="input__label color">Post Title</label>
               <input
-                className="input__field"
+                className="input__field bg-color"
                 type="text"
                 value={element}
                 onChange={(e) => setElement(e.target.value)}
@@ -59,9 +74,9 @@ function CreatePost() {
             </div>
 
             <div className="input">
-              <label className="input__label">Image Link</label>
+              <label className="input__label color">Image Link</label>
               <input
-                className="input__field"
+                className="input__field bg-color"
                 type="text"
                 value={imageLink}
                 onChange={(e) => setImageLink(e.target.value)}
@@ -69,9 +84,9 @@ function CreatePost() {
             </div>
 
             <div className="input">
-              <label className="input__label">Expectation</label>
+              <label className="input__label color">Expectation</label>
               <input
-                className="input__field"
+                className="input__field bg-color"
                 type="text"
                 value={expectation}
                 onChange={(e) => setExpectation(e.target.value)}
@@ -79,9 +94,9 @@ function CreatePost() {
             </div>
 
             <div className="input">
-              <label className="input__label">Category</label>
+              <label className="input__label color">Category</label>
               <input
-                className="input__field"
+                className="input__field bg-color"
                 type="text"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
@@ -89,9 +104,9 @@ function CreatePost() {
             </div>
 
             <div className="input">
-              <label className="input__label">Quote</label>
+              <label className="input__label color">Quote</label>
               <input
-                className="input__field"
+                className="input__field bg-color"
                 type="text"
                 value={quote}
                 onChange={(e) => setQuote(e.target.value)}
@@ -101,12 +116,12 @@ function CreatePost() {
 
           <div id="bot-butt">
             <Link to="/">
-              <button id="can" onClick={handleClick}>
+              <button className="can" onClick={handleClick}>
                 Cancel
               </button>
             </Link>
-            <button id="cre" onClick={handleSubmit}>
-              Create
+            <button className="up" onClick={handleUpdate}>
+              Update
             </button>
           </div>
         </div>
@@ -115,4 +130,4 @@ function CreatePost() {
   );
 }
 
-export default CreatePost;
+export default UpdatePost;

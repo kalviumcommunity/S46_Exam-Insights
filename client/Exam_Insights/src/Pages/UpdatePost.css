@@ -1,0 +1,55 @@
+.border {
+    border: 6px solid rgb(98, 34, 128);
+}
+
+.bg-color {
+    background-color: rgb(118, 59, 144);
+    color: rgb(255, 255, 255);
+}
+
+.bg-color:focus {
+    background-color: white;
+    color: black;
+}
+
+.color {
+    color: rgb(98, 34, 128)
+}
+
+.up, .can {
+    padding: 6px 12px;
+    font-weight: 700;
+    font-size: 18px;
+    border-radius: 5px;
+    color: rgb(249, 249, 249);
+    cursor: pointer;
+    margin: 6px;
+    letter-spacing: 1px;
+    box-shadow: 2px 3px 2px #000000;
+    transition: box-shadow 0.3s;
+}
+
+.up {
+    background-color: #1d2f79;
+    border: 2px solid #b6cee7;
+}
+
+.up:hover {
+    background-color: #0c4885;
+}
+
+.up:active, .can:active {
+    box-shadow: inset 1px 2px 4px rgba(0, 0, 0, 1);
+}
+
+.can {
+    color: #105090;
+    font-weight: 700;
+    font-size: 19px;
+    border: 2px solid white;
+}
+
+.can:hover {
+    background-color: rgb(222, 222, 222);
+}
+
