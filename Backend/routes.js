@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { Post, User } = require('./schema');
+const { userJoiSchema, postJoiSchema } = require("./joiSchema");
+router.use(express.json());
 
-router.use(express.json()); 
+
 
 // Read all users
 router.get('/users', async (req, res) => {
@@ -11,7 +13,7 @@ router.get('/users', async (req, res) => {
         res.json(users);
     } catch (err) {
         res.status(500).json({ message: err.message });
-    }   
+    }
 });
 
 // Read all posts
@@ -52,6 +54,10 @@ router.get('/posts/:id', async (req, res) => {
 
 // Create a new user
 router.post('/users', async (req, res) => {
+    const { error } = userJoiSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+    }
     const user = new User({
         username: req.body.username,
         email: req.body.email,
@@ -68,6 +74,10 @@ router.post('/users', async (req, res) => {
 
 // Create a new post
 router.post('/posts', async (req, res) => {
+    const { error } = postJoiSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+    }
     const post = new Post({
         element: req.body.element,
         category: req.body.category,
@@ -88,6 +98,10 @@ router.post('/posts', async (req, res) => {
 // Update a user
 router.patch('/users/:id', async (req, res) => {
     try {
+        const { error } = userJoiSchema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ message: error.details[0].message });
+        }
         const user = await User.findById(req.params.id);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -106,6 +120,10 @@ router.patch('/users/:id', async (req, res) => {
 // Update a post
 router.patch('/posts/:id', async (req, res) => {
     try {
+        const { error } = postJoiSchema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ message: error.details[0].message });
+        }
         const post = await Post.findById(req.params.id);
         if (!post) {
             return res.status(404).json({ message: 'Post not found' });
@@ -148,6 +166,6 @@ router.delete('/posts/:id', async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
-}); 
+});
 
 module.exports = router;
