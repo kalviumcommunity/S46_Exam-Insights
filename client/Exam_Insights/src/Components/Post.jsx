@@ -55,7 +55,7 @@ function Post({
           - <span>{postedBy}</span>
         </div>
         <div id="img-con">
-          <img id="post-img" src={imageLink} alt="demo" />
+          <img id="post-img" src={imageLink} alt="Link not defined!" />
         </div>
         <div id="quote">
           <p>

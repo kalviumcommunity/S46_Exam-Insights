@@ -3,13 +3,34 @@ const router = express.Router();
 const { Post, User } = require('./schema');
 const { userJoiSchema, postJoiSchema } = require("./joiSchema");
 const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+
 router.use(express.json());
 
 
+const createToken = (payload) => {
+    return jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: 1 * 24 * 60 * 60
+    });
+};
 
+const authenticate = (req, res, next) => {
+    const token = req.headers.authorization;
+    if (!token || !token.startsWith('Bearer ')) {
+        return res.status(401).send({ message: 'Unauthorized: No token provided' });
+    }
+    const authToken = token.split('Bearer ')[1];
+    try {
+        const decoded = jwt.verify(authToken, process.env.JWT_SECRET);
+        req.user = decoded
+        next()
+    } catch (error) {
+        return res.status(403).send({ message: 'Forbidden: Invalid token' });
+    }
+}
 
 // Read all users
-router.get('/users', async (req, res) => {
+router.get('/users',authenticate, async (req, res) => {
     try {
         const users = await User.find();
         res.json(users);
@@ -19,7 +40,7 @@ router.get('/users', async (req, res) => {
 });
 
 // Read all posts
-router.get('/posts', async (req, res) => {
+router.get('/posts',authenticate, async (req, res) => {
     try {
         const posts = await Post.find();
         res.json(posts);
@@ -29,7 +50,7 @@ router.get('/posts', async (req, res) => {
 });
 
 // Get a user by ID
-router.get('/users/:id', async (req, res) => {
+router.get('/users/:id',authenticate, async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         if (!user) {
@@ -42,7 +63,7 @@ router.get('/users/:id', async (req, res) => {
 });
 
 // Get a post by ID
-router.get('/posts/:id', async (req, res) => {
+router.get('/posts/:id',authenticate, async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
         if (!post) {
@@ -80,7 +101,12 @@ router.post('/users', async (req, res) => {
             });
 
             const newUser = await user.save();
-            res.status(201).json(newUser);
+            const token = createToken({
+                userId: newUser._id,
+                username: newUser.username,
+            });
+
+            res.status(201).json(token);
         }
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -89,7 +115,7 @@ router.post('/users', async (req, res) => {
 
 
 // Create a new post
-router.post('/posts', async (req, res) => {
+router.post('/posts',authenticate, async (req, res) => {
     const { error } = postJoiSchema.validate(req.body);
     if (error) {
         return res.status(400).json({ message: error.details[0].message });
@@ -128,20 +154,19 @@ router.post("/login", async (req, res) => {
             return res.status(401).json({ message: "Incorrect password" })
         }
 
-        const responseData = {
+        const token = createToken({
             userId: user._id,
             username: user.username,
-            email: user.email
-        };
+        });
 
-        res.status(200).json(responseData);
+        res.status(201).json(token);
     } catch (err) {
         res.status(500).json({ message: "Internal server error" })
     }
 });
 
 // Update a user
-router.patch('/users/:id', async (req, res) => {
+router.patch('/users/:id',authenticate, async (req, res) => {
     try {
         const { error } = userJoiSchema.validate(req.body);
         if (error) {
@@ -163,7 +188,7 @@ router.patch('/users/:id', async (req, res) => {
 });
 
 // Update a post
-router.patch('/posts/:id', async (req, res) => {
+router.patch('/posts/:id',authenticate, async (req, res) => {
     try {
         const { error } = postJoiSchema.validate(req.body);
         if (error) {
@@ -188,7 +213,7 @@ router.patch('/posts/:id', async (req, res) => {
 });
 
 // Delete a user
-router.delete('/users/:id', async (req, res) => {
+router.delete('/users/:id',authenticate, async (req, res) => {
     try {
         const deletedUser = await User.findByIdAndDelete(req.params.id);
         if (!deletedUser) {
@@ -201,7 +226,7 @@ router.delete('/users/:id', async (req, res) => {
 });
 
 // Delete a post
-router.delete('/posts/:id', async (req, res) => {
+router.delete('/posts/:id',authenticate, async (req, res) => {
     try {
         const deletedPost = await Post.findByIdAndDelete(req.params.id);
         if (!deletedPost) {

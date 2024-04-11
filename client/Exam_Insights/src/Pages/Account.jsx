@@ -33,7 +33,8 @@ const AuthComponent = () => {
         }
       );
       setCookie("username", data.Username, 1);
-      setCookie("email", data.Email, 1);
+      setCookie("email", data.email, 1);
+      setCookie('jwtToken', response.data, 1)
 
       navigate("/home");
     } catch (err) {
@@ -52,7 +53,8 @@ const AuthComponent = () => {
       );
       console.log("Login Successful");
       setCookie("username", data.Username, 1);
-      setCookie("email", response.data.email, 1);
+      setCookie("jwtToken", response.data, 1);
+
       navigate("/home");
     } catch (err) {
       console.log(err.response.data.message);

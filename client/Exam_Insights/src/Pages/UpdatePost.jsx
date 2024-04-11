@@ -3,6 +3,7 @@ import "./UpdatePost.css";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import logo from "../assets/Asap_Logo.png";
+import { getCookie } from "../Components/Cookies";
 
 function UpdatePost() {
   const { id } = useParams();
@@ -11,12 +12,16 @@ function UpdatePost() {
   const [expectation, setExpectation] = useState();
   const [category, setCategory] = useState();
   const [quote, setQuote] = useState();
+  const jwtToken = getCookie("jwtToken");
+  const postedBy = getCookie("username");
 
   const nav = useNavigate();
 
   useEffect(() => {
     axios
-      .get(import.meta.env.VITE_API_URL + "posts/" + id)
+      .get(import.meta.env.VITE_API_URL + "posts/" + id, {
+        headers: { authorization: `Bearer ${jwtToken}` },
+      })
       .then((post) => {
         setElement(post.data.element);
         setImageLink(post.data.imageLink);
@@ -32,13 +37,20 @@ function UpdatePost() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     axios
-      .patch(import.meta.env.VITE_API_URL + "posts/" + id, {
-        element,
-        imageLink,
-        expectation,
-        category,
-        quote,
-      })
+      .patch(
+        import.meta.env.VITE_API_URL + "posts/" + id,
+        {
+          element,
+          imageLink,
+          expectation,
+          category,
+          quote,
+          postedBy,
+        },
+        {
+          headers: { authorization: `Bearer ${jwtToken}` },
+        }
+      )
       .then(() => {
         nav("/home");
       })
@@ -57,7 +69,7 @@ function UpdatePost() {
         <Link to="/home">
           <img id="logo" src={logo} alt="red" onClick={handleClick} />
         </Link>
-        <div className="form border" >
+        <div className="form border">
           <div id="form-head">
             <span>Update Your Post!</span>
           </div>

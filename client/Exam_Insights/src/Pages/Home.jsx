@@ -4,13 +4,16 @@ import Navbar from "../Components/Navbar";
 import Post from "../Components/Post";
 import axios from "axios";
 import { Link } from "react-router-dom";
-
+import { getCookie } from "../Components/Cookies";
 function Home() {
   const [data, setData] = useState([]);
-
+  const jwtToken = getCookie("jwtToken");
+  
   useEffect(() => {
     axios
-      .get(import.meta.env.VITE_API_URL + "posts")
+      .get(import.meta.env.VITE_API_URL + "posts", {
+        headers: { authorization: `Bearer ${jwtToken}` },
+      })
       .then((response) => {
         setData(response.data);
       })
