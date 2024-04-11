@@ -5,30 +5,56 @@ import change from "../assets/change.png";
 import logout from "../assets/logout.png";
 import del from "../assets/delete.png";
 import { useState, useEffect, useRef } from "react";
+import { getCookie } from "./Cookies";
+import { Link, useNavigate } from "react-router-dom";
+
 
 function Navbar() {
   const [account, setShowAccount] = useState(false);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const nav = useNavigate();
+
   const accountRef = useRef(null);
 
-  // Function to toggle account popup
+  useEffect(() => {
+    const usernameFromCookie = getCookie("username");
+    if (usernameFromCookie) {
+      setUsername(usernameFromCookie);
+    }
+    const email = getCookie("email");
+    if (email) {
+      setEmail(email);
+    }
+  }, []);
+
+  function handleLogout() {
+    document.cookie =
+      "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    setUsername("");
+    setEmail("");
+    nav("/");
+  }
+
   const toggleAccount = () => {
-    setShowAccount(!account); 
+    setShowAccount(!account);
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-    
       if (accountRef.current && !accountRef.current.contains(event.target)) {
-        setShowAccount(false); 
+        setShowAccount(false);
       }
     };
 
     const handleScroll = () => {
-      setShowAccount(false); 
+      setShowAccount(false);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    window.addEventListener("scroll", handleScroll); 
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -36,11 +62,11 @@ function Navbar() {
     };
   }, [account]);
 
-
   return (
     <>
       <div id="navbar">
-        <img src={logo2} alt="" />
+        <img src={logo2} alt="logo" />
+
         <div id="navigation">
           <a
             className="button"
@@ -64,8 +90,8 @@ function Navbar() {
       {account && (
         <div id="account" ref={accountRef}>
           <div id="top">
-            <p id="name">User</p>
-            <p id="email">trial@email.com</p>
+            <p id="name">{username}</p>
+            <p id="email">{email}</p>
           </div>
           <div id="bottom">
             <div id="switch" className="butts">
@@ -74,7 +100,7 @@ function Navbar() {
             </div>
             <div id="logout" className="butts">
               <img src={logout} alt="logout" />
-              <p>Logout</p>
+              <p onClick={handleLogout}>Logout</p>
             </div>
             <div id="delete" className="butts">
               <img src={del} alt="switch" />
