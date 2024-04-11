@@ -40,7 +40,7 @@ function UpdatePost() {
         quote,
       })
       .then(() => {
-        nav("/");
+        nav("/home");
       })
       .catch((err) => {
         console.log(err);
@@ -48,13 +48,13 @@ function UpdatePost() {
   };
 
   const handleClick = () => {
-    nav("/");
+    nav("/home");
   };
 
   return (
     <>
       <div id="container">
-        <Link to="/">
+        <Link to="/home">
           <img id="logo" src={logo} alt="red" onClick={handleClick} />
         </Link>
         <div className="form border" >
@@ -115,7 +115,7 @@ function UpdatePost() {
           </div>
 
           <div id="bot-butt">
-            <Link to="/">
+            <Link to="/home">
               <button className="can" onClick={handleClick}>
                 Cancel
               </button>

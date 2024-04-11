@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { Post, User } = require('./schema');
 const { userJoiSchema, postJoiSchema } = require("./joiSchema");
+const bcrypt = require('bcrypt');
 router.use(express.json());
+
 
 
 
@@ -54,23 +56,37 @@ router.get('/posts/:id', async (req, res) => {
 
 // Create a new user
 router.post('/users', async (req, res) => {
-    const { error } = userJoiSchema.validate(req.body);
-    if (error) {
-        return res.status(400).json({ message: error.details[0].message });
-    }
-    const user = new User({
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password
-    });
-
     try {
-        const newUser = await user.save();
-        res.status(201).json(newUser);
+        const { error } = userJoiSchema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ message: error.details[0].message });
+        } else {
+            const usernameExists = await User.findOne({ username: req.body.username });
+            if (usernameExists) {
+                return res.status(409).json({ message: "Username already exists" });
+            }
+            const emailExists = await User.findOne({ email: req.body.email });
+            if (emailExists) {
+                return res.status(409).json({ message: "Email already exists" });
+            }
+
+            const hashedPassword = await bcrypt.hash(req.body.password, 12);
+
+
+            const user = new User({
+                username: req.body.username,
+                email: req.body.email,
+                password: hashedPassword
+            });
+
+            const newUser = await user.save();
+            res.status(201).json(newUser);
+        }
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
 });
+
 
 // Create a new post
 router.post('/posts', async (req, res) => {
@@ -92,6 +108,35 @@ router.post('/posts', async (req, res) => {
         res.status(201).json(newPost);
     } catch (err) {
         res.status(400).json({ message: err.message });
+    }
+});
+
+router.post("/login", async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        if (!username || !password) {
+            return res.status(400).json({ message: "Username and password are required" })
+        }
+
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(400).json({ message: "User does not exist" })
+        }
+
+        const validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) {
+            return res.status(401).json({ message: "Incorrect password" })
+        }
+
+        const responseData = {
+            userId: user._id,
+            username: user.username,
+            email: user.email
+        };
+
+        res.status(200).json(responseData);
+    } catch (err) {
+        res.status(500).json({ message: "Internal server error" })
     }
 });
 

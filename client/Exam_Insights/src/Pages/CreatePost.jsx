@@ -33,13 +33,13 @@ function CreatePost() {
   };
 
   const handleClick = () => {
-    nav("/");
+    nav("/home");
   };
 
   return (
     <>
       <div id="container">
-        <Link to="/">
+        <Link to="/home">
           <img id="logo" src={logo} alt="red" onClick={handleClick} />
         </Link>
         <div className="form">
@@ -100,7 +100,7 @@ function CreatePost() {
           </div>
 
           <div id="bot-butt">
-            <Link to="/">
+            <Link to="/home">
               <button id="can" onClick={handleClick}>
                 Cancel
               </button>
