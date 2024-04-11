@@ -106,7 +106,7 @@ const AuthComponent = () => {
                 />
               </div>
               <div className="form-group">
-                <FontAwesomeIcon icon={faLock} className="form-icon" />
+                <FontAwesomeIcon icon={faLock} className="form-icon bugg" />
                 <input
                   type="password"
                   className="form-control"

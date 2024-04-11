@@ -4,6 +4,7 @@ const userJoiSchema = joi.object({
     username: joi.string().min(3).max(20).lowercase().required(),
     email: joi.string().required().email().lowercase(),
     password: joi.string().required(),
+    confirmPassword: joi.ref("password"),
 })
 
 const postJoiSchema = joi.object({

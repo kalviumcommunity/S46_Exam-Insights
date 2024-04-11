@@ -29,10 +29,9 @@ body {
     right: 0;
     margin: auto;
     z-index: 100;
-    background-color: rgb(239, 216, 255);
+    background-color: rgb(235, 208, 255);
     border: 3px solid hsl(0, 0%, 100%);
     transition: all ease 1s;
-    /* box-shadow: 0px 0px 0.5px 0.5px lighten(#ffaf53, 20%); */
 }
 
 .form-horizontal {
@@ -73,7 +72,7 @@ form {
 .form-icon {
     position: absolute;
     height: 18px;
-    padding: 12.5px 0px;
+    padding: 11px 0px;
     width: 40px;
     text-align: center;
     line-height: 50px;
@@ -88,14 +87,15 @@ form {
 }
 
 .bugg {
-    padding: 13px 0px !important;
+    padding: 11px 0px !important;
 }
 
 .form-group input {
     width: 100%;
     border-radius: 4px;
     background-color: #fff;
-    padding: 12px;
+    padding: 10px;
+    font-size: 15px;
     padding-left: 45px;
     color: black;
     box-shadow: 0 3px 3px black;
