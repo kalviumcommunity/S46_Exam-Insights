@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import "./CreatePost.css";
 import logo from "../assets/Asap_Logo.png";
+import { getCookie } from "../Components/Cookies";
 
 function CreatePost() {
   const [element, setElement] = useState("");
@@ -10,6 +11,9 @@ function CreatePost() {
   const [expectation, setExpectation] = useState("");
   const [category, setCategory] = useState("");
   const [quote, setQuote] = useState("");
+  const jwtToken = getCookie("jwtToken");
+  const postedBy = getCookie("username");
+
 
   const nav = useNavigate();
 
@@ -24,9 +28,13 @@ function CreatePost() {
           expectation,
           category,
           quote,
+          postedBy: postedBy
+        },
+        {
+          headers: { authorization: `Bearer ${jwtToken}` },
         }
       );
-      nav("/");
+      nav("/home");
     } catch (error) {
       console.log(error.response.data.message);
     }
