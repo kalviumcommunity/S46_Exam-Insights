@@ -40,11 +40,11 @@ function Post({
 
   // Delete button
   const handleDelete = (id) => {
-    axios.delete(import.meta.env.VITE_API_URL+ "posts/" + id)
-    .then(() => window.location.reload(),
+    axios.delete(import.meta.env.VITE_API_URL+ "posts/" + id,
     {
       headers: { authorization: `Bearer ${jwtToken}` },
     })
+    .then(() => window.location.reload())
     .catch(err => console.log(err))
   }
 
