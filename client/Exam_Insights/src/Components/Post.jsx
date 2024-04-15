@@ -4,6 +4,8 @@ import like from "../assets/Like.png";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios'
+import { getCookie } from "../Components/Cookies";
+
 
 function Post({
   category,
@@ -18,6 +20,8 @@ function Post({
   
 
   const [rotate, setRotate] = useState(false);
+  const jwtToken = getCookie("jwtToken");
+
 
   // Function to toggle rotation
   const toggleRotation = () => {

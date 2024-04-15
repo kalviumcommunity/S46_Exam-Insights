@@ -20,7 +20,7 @@ function Home() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [data]);
 
   return (
     <>
