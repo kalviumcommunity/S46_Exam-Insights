@@ -7,6 +7,20 @@ import { Link } from "react-router-dom";
 import { getCookie } from "../Components/Cookies";
 import { toast } from "react-toastify";
 
+export function getData(setData) {
+  const jwtToken = getCookie("jwtToken");
+
+  axios
+    .get(import.meta.env.VITE_API_URL + "posts", {
+      headers: { authorization: `Bearer ${jwtToken}` },
+    })
+    .then((response) => {
+      setData(response.data);
+    })
+    .catch((err) => {
+      toast.error(err.response.data.message);
+    });
+}
 
 function Home() {
   const [data, setData] = useState([]);
@@ -14,19 +28,9 @@ function Home() {
   const [selected, setSelected] = useState("All Users");
 
   const jwtToken = getCookie("jwtToken");
-  
 
   useEffect(() => {
-    axios
-      .get(import.meta.env.VITE_API_URL + "posts", {
-        headers: { authorization: `Bearer ${jwtToken}` },
-      })
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch((err) => {
-        toast.error(err.response.data.message);
-      });
+    getData(setData);
   }, []);
 
   useEffect(() => {
@@ -100,7 +104,7 @@ function Home() {
       </div>
 
       <div className="postContainer">
-        {Posts && Posts.map((post) => <Post {...post} key={post._id} />)}
+        {Posts && Posts.map((post) => <Post setData={setData} {...post} key={post._id} />)}
       </div>
     </>
   );

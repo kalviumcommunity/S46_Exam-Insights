@@ -16,12 +16,12 @@ const createToken = (payload) => {
 
 const authenticate = (req, res, next) => {
     const token = req.headers.authorization;
-    console.log(token)
+ 
     if (!token || !token.startsWith('Bearer ')) {
         return res.status(401).send({ message: 'Unauthorized: No token provided' });
     }
     const authToken = token.split('Bearer ')[1];
-    console.log(authToken)
+    
     try {
         const decoded = jwt.verify(authToken, process.env.JWT_SECRET);
         req.user = decoded
@@ -117,9 +117,12 @@ router.post('/users', async (req, res) => {
 
 
 
-//current user id
+//get current user id
 router.get('/user', authenticate, async (req, res) => {
     try {
+        if (!req.user) {
+            return res.status(404).json({ message: 'User data not found' });
+        }
 
         res.json({ userId: req.user.userId, username: req.user.username, email: req.user.email });
     } catch (err) {

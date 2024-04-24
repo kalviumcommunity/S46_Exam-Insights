@@ -7,6 +7,7 @@ import axios from "axios";
 import { getCookie } from "../Components/Cookies";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getData } from "../Pages/Home";
 
 function Post({
   category,
@@ -17,6 +18,7 @@ function Post({
   postedBy,
   quote,
   _id,
+  setData,
 }) {
   const [rotate, setRotate] = useState(false);
   const [postLikes, setPostLikes] = useState(likes);
@@ -60,27 +62,6 @@ function Post({
   };
 
   // Delete button
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    // Fetch updated list of posts when called
-    fetchPosts();
-  }, []);
-
-  const fetchPosts = () => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}posts`, {
-        headers: { Authorization: `Bearer ${jwtToken}` },
-      })
-      .then((response) => {
-        setPosts(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching posts:", error);
-        toast.error("Failed to fetch posts");
-      });
-  };
-
   const handleDelete = (postId) => {
     axios
       .delete(`${import.meta.env.VITE_API_URL}posts/${postId}`, {
@@ -88,7 +69,8 @@ function Post({
       })
       .then(() => {
         // After deleting, fetch the updated list of posts
-        fetchPosts();
+        getData(setData);
+        console.log("red");
         toast.success("Post deleted successfully!");
       })
       .catch((error) => {
@@ -96,8 +78,6 @@ function Post({
         toast.error("Failed to delete post");
       });
   };
-  
-  
 
   const isCurrentUser = postedBy === username;
 
