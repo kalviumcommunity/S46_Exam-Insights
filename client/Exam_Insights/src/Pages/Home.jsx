@@ -27,7 +27,7 @@ function Home() {
       .catch((err) => {
         toast.error(err.response.data.message);
       });
-  }, [data]);
+  }, []);
 
   useEffect(() => {
     axios
