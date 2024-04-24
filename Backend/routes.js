@@ -16,10 +16,12 @@ const createToken = (payload) => {
 
 const authenticate = (req, res, next) => {
     const token = req.headers.authorization;
+    console.log(token)
     if (!token || !token.startsWith('Bearer ')) {
         return res.status(401).send({ message: 'Unauthorized: No token provided' });
     }
     const authToken = token.split('Bearer ')[1];
+    console.log(authToken)
     try {
         const decoded = jwt.verify(authToken, process.env.JWT_SECRET);
         req.user = decoded
@@ -106,12 +108,25 @@ router.post('/users', async (req, res) => {
                 username: newUser.username,
             });
 
-            res.status(201).json(token);
+            res.status(201).json({ token, userId: newUser._id, username: newUser.username, email: newUser.email });
         }
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
 });
+
+
+
+//current user id
+router.get('/user', authenticate, async (req, res) => {
+    try {
+
+        res.json({ userId: req.user.userId, username: req.user.username, email: req.user.email });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 
 
 // Create a new post
@@ -121,12 +136,13 @@ router.post('/posts',authenticate, async (req, res) => {
         return res.status(400).json({ message: error.details[0].message });
     }
     const post = new Post({
-        element: req.body.element,
+        title: req.body.title,
         category: req.body.category,
         expectation: req.body.expectation,
         postedBy: req.body.postedBy,
         imageLink: req.body.imageLink,
-        quote: req.body.quote
+        quote: req.body.quote,
+        likes: req.body.likes
     });
 
     try {
@@ -159,7 +175,7 @@ router.post("/login", async (req, res) => {
             username: user.username,
         });
 
-        res.status(201).json(token);
+        res.status(200).json({ token, userId: user._id, username: user.username, email: user.email });
     } catch (err) {
         res.status(500).json({ message: "Internal server error" })
     }
@@ -198,12 +214,28 @@ router.patch('/posts/:id',authenticate, async (req, res) => {
         if (!post) {
             return res.status(404).json({ message: 'Post not found' });
         }
-        post.element = req.body.element || post.element;
+        post.title = req.body.title || post.title;
         post.category = req.body.category || post.category;
         post.expectation = req.body.expectation || post.expectation;
         post.postedBy = req.body.postedBy || post.postedBy;
         post.imageLink = req.body.imageLink || post.imageLink;
         post.quote = req.body.quote || post.quote;
+        post.likes = req.body.likes || post.likes
+
+        const updatedPost = await post.save();
+        res.json(updatedPost);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+router.patch('/posts/:id/like', authenticate, async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        post.likes = post.likes + 1;
 
         const updatedPost = await post.save();
         res.json(updatedPost);

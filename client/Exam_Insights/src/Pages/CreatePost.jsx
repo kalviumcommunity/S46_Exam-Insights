@@ -4,9 +4,10 @@ import axios from "axios";
 import "./CreatePost.css";
 import logo from "../assets/Asap_Logo.png";
 import { getCookie } from "../Components/Cookies";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function CreatePost() {
-  const [element, setElement] = useState("");
+  const [title, setElement] = useState("");
   const [imageLink, setImageLink] = useState("");
   const [expectation, setExpectation] = useState("");
   const [category, setCategory] = useState("");
@@ -23,20 +24,22 @@ function CreatePost() {
       const response = await axios.post(
         import.meta.env.VITE_API_URL + "posts",
         {
-          element,
+          title,
           imageLink,
           expectation,
           category,
           quote,
-          postedBy: postedBy
+          postedBy: postedBy,
+          likes: 0
         },
         {
           headers: { authorization: `Bearer ${jwtToken}` },
         }
       );
+      toast.success("Posted successfully!")
       nav("/home");
     } catch (error) {
-      console.log(error.response.data.message);
+      toast.error(error.response.data.message);
     }
   };
 
@@ -61,7 +64,7 @@ function CreatePost() {
               <input
                 className="input__field"
                 type="text"
-                value={element}
+                value={title}
                 onChange={(e) => setElement(e.target.value)}
               />
             </div>

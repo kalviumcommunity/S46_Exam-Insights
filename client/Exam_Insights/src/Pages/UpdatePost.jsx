@@ -4,10 +4,12 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import logo from "../assets/Asap_Logo.png";
 import { getCookie } from "../Components/Cookies";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function UpdatePost() {
   const { id } = useParams();
-  const [element, setElement] = useState("");
+  const [title, setTitle] = useState("");
   const [imageLink, setImageLink] = useState("");
   const [expectation, setExpectation] = useState();
   const [category, setCategory] = useState();
@@ -23,14 +25,14 @@ function UpdatePost() {
         headers: { authorization: `Bearer ${jwtToken}` },
       })
       .then((post) => {
-        setElement(post.data.element);
+        setTitle(post.data.title);
         setImageLink(post.data.imageLink);
         setExpectation(post.data.expectation);
         setCategory(post.data.category);
         setQuote(post.data.quote);
       })
       .catch((err) => {
-        console.log("axios fail");
+        toast.error(err.response.data.message);
       });
   }, [id]);
 
@@ -40,7 +42,7 @@ function UpdatePost() {
       .patch(
         import.meta.env.VITE_API_URL + "posts/" + id,
         {
-          element,
+          title,
           imageLink,
           expectation,
           category,
@@ -52,10 +54,13 @@ function UpdatePost() {
         }
       )
       .then(() => {
-        nav("/home");
+        toast.success("Post updated successfully");
+        setTimeout(() => {
+          nav("/home");
+        }, 1000);
       })
       .catch((err) => {
-        console.log(err);
+        toast.error(err.response.data.message);
       });
   };
 
@@ -80,8 +85,8 @@ function UpdatePost() {
               <input
                 className="input__field bg-color"
                 type="text"
-                value={element}
-                onChange={(e) => setElement(e.target.value)}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </div>
 

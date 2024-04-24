@@ -18,8 +18,12 @@
     border-radius: 50%;
     height: 50px;
     width: 50px;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(227, 227, 227);
     border: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    overflow: hidden;
 }
 
 #navigation {
@@ -78,18 +82,18 @@
 #account {
     z-index: 10;
     border-radius: 12px;
-    height: 280px;
+    height: 220px;
     width: 250px;
     position: fixed;
-    top: 110px;
-    right: 2%;
+    top: 99px;
+    right: 1%;
     border: 2px solid rgb(84, 84, 84);
 }
 
 #top {
     border-radius: 12px 12px 0 0;
     background-color: rgb(56, 56, 56);
-    height: 30%;
+    height: 34%;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -98,18 +102,20 @@
 }
 
 #name {
-    color: rgb(219, 219, 219);
-    font-size: 22px;
+    color: rgb(213, 213, 213);
+    font-size: 20px;
+    font-weight: 600;
 }
 
 #email {
-    color: rgb(232, 232, 232);
-    font-size: 16px;
+    color: rgb(217, 217, 217);
+    font-size: 14px;
+    padding-top: 3px;
 }
 
 #bottom{
-    height: 70%;
-    background-color: rgb(233, 233, 233);
+    height: 66%;
+    background-color: rgb(235, 235, 255);
     border-radius: 0 0 12px 12px;
     display: flex;
     flex-direction: column;
@@ -120,7 +126,7 @@
 .butts {
     margin: 10px;
     padding: 5px 12px;
-    font-size: 18px;
+    font-size: 16px;
     border-radius: 5px;
     cursor: pointer;
     width: 105px;
@@ -130,32 +136,13 @@
     box-shadow: none !important;
 }
 
-#switch {
-    border: 2px solid #3498DB;
-    color: #3498DB;
-    background-color: rgb(245, 245, 245);
-    display: flex;
-    justify-content: space-between;
-    box-shadow: 2px 1px 2px #3498DB;
-}
-
-#switch img {
-    height: 20px;
-    padding: 2px;
-    margin-right: 5px;
-}
-
-#switch:hover {
-    scale: 1.05;
-}
-
 #logout {
-    border: 2px solid #F39C12;
+    border: 1px solid #F39C12;
     color: #F39C12;
     background-color: rgb(245, 245, 245);
     display: flex;
     justify-content: space-between;
-    box-shadow: 2px 1px 2px #F39C12;
+    box-shadow: 2px 2px 2px  #6a4408;
 }
 
 #logout img {
@@ -169,18 +156,17 @@
 }
 
 #delete {
-    border: 2px solid #E74C3C;
+    border: 1px solid #E74C3C;
     color: #E74C3C;
     background-color: rgb(245, 245, 245);
     display: flex;
     justify-content: space-between;
-    box-shadow: 2px 1px 2px #E74C3C;
+    box-shadow: 2px 2px 2px #632119;
 }
 
 #delete img {
     height: 20px;
     padding: 2px;
-    margin-left: 3px;
 }
 
 #delete p {
@@ -189,6 +175,12 @@
 
 #delete:hover {
     scale: 1.05;
+    
 }
 
+#avatar {
+    border-radius: 50%;
+    height: 60px!important;
+
+}
 

@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
-    element: {
+    title: {
         type: String,
-        required: true,
     },
     category: {
         type: String,
@@ -19,7 +18,10 @@ const postSchema = new mongoose.Schema({
     },
     quote: {
         type: String,
-    }
+    },
+    likes: {
+        type: Number,
+    },
 })
 
 const userSchema = new mongoose.Schema({

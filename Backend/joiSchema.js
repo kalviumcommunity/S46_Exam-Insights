@@ -8,12 +8,13 @@ const userJoiSchema = joi.object({
 })
 
 const postJoiSchema = joi.object({
-    element: joi.string().min(3).max(40).required(),
-    category: joi.string().min(3).max(15).required(),
+    title: joi.string().min(3).max(40).required(),
+    category: joi.string().min(3).max(18).required(),
     expectation: joi.string().min(3).max(30).required(),
     postedBy: joi.string().required(),
-    imageLink: joi.string().required(),
-    quote: joi.string().min(3).max(40).required()
+    imageLink: joi.string().min(3).required(),
+    quote: joi.string().min(3).max(40).required(),
+    likes: joi.number()
 })
 
 module.exports = {

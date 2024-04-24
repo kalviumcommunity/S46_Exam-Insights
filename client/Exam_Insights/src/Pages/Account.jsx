@@ -11,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 import logo from "../assets/Asap_Logo.png";
 import { setCookie } from "../Components/Cookies";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AuthComponent = () => {
   const [isSignIn, setIsSignIn] = useState(false);
@@ -18,6 +20,7 @@ const AuthComponent = () => {
   const toggleForm = () => {
     setIsSignIn(!isSignIn);
   };
+    
 
   const navigate = useNavigate();
 
@@ -34,11 +37,11 @@ const AuthComponent = () => {
       );
       setCookie("username", data.Username, 1);
       setCookie("email", data.email, 1);
-      setCookie('jwtToken', response.data, 1)
-
+      setCookie('jwtToken', response.data.token, 1)
+      toast.success("Signed up successfully!")
       navigate("/home");
     } catch (err) {
-      console.error(err.response.data.message);
+      toast.error(err.response.data.message);
     }
   };
 
@@ -51,13 +54,16 @@ const AuthComponent = () => {
           password: data.password,
         }
       );
-      console.log("Login Successful");
       setCookie("username", data.Username, 1);
-      setCookie("jwtToken", response.data, 1);
+      const { token, email } = response.data;
+
+      setCookie("jwtToken", token, 1);
+      setCookie("email", email, 1);
+      toast.success("Logged in successfully!")
 
       navigate("/home");
     } catch (err) {
-      console.log(err.response.data.message);
+      toast.error(err.response.data.message);
     }
   };
 
@@ -82,7 +88,7 @@ const AuthComponent = () => {
           </div>
           <form
             action="#"
-            class="loginForm"
+            className="loginForm"
             onSubmit={(e) => {
               e.preventDefault();
               const data = {
@@ -116,7 +122,7 @@ const AuthComponent = () => {
                   placeholder="Password"
                 />
               </div>
-              <button type="submit" class="btn btn-default">
+              <button type="submit" className="btn btn-default">
                 login
               </button>
             </div>
@@ -139,7 +145,7 @@ const AuthComponent = () => {
           </div>
           <form
             action="#"
-            class="signupForm"
+            className="signupForm"
             onSubmit={(e) => {
               e.preventDefault();
               const data = {
@@ -202,7 +208,7 @@ const AuthComponent = () => {
                   placeholder="Retype-Password"
                 />
               </div>
-              <button type="submit" class="btn btn-default">
+              <button type="submit" className="btn btn-default">
                 Sign up
               </button>
             </div>
