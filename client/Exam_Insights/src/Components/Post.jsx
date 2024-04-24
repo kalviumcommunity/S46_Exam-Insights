@@ -3,9 +3,11 @@ import "./Post.css";
 import like from "../assets/Like.png";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from 'axios'
+import axios from "axios";
 import { getCookie } from "../Components/Cookies";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { getData } from "../Pages/Home";
 
 function Post({
   category,
@@ -16,12 +18,13 @@ function Post({
   postedBy,
   quote,
   _id,
+  setData,
 }) {
-  
-
   const [rotate, setRotate] = useState(false);
-  const jwtToken = getCookie("jwtToken");
+  const [postLikes, setPostLikes] = useState(likes);
 
+  const jwtToken = getCookie("jwtToken");
+  const username = getCookie("username");
 
   // Function to toggle rotation
   const toggleRotation = () => {
@@ -40,18 +43,43 @@ function Post({
     };
   }, [rotate]);
 
-
+  const handleLike = (_id) => {
+    axios
+      .patch(
+        `${import.meta.env.VITE_API_URL}posts/${_id}/like`,
+        {},
+        {
+          headers: { authorization: `Bearer ${jwtToken}` },
+        }
+      )
+      .then((response) => {
+        setPostLikes(response.data.likes);
+        toast.success("Post liked!");
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+  };
 
   // Delete button
-  const handleDelete = (id) => {
-    axios.delete(import.meta.env.VITE_API_URL+ "posts/" + id,
-    {
-      headers: { authorization: `Bearer ${jwtToken}` },
-    })
-    .then(() => window.location.reload())
-    .catch(err => console.log(err))
-  }
+  const handleDelete = (postId) => {
+    axios
+      .delete(`${import.meta.env.VITE_API_URL}posts/${postId}`, {
+        headers: { Authorization: `Bearer ${jwtToken}` },
+      })
+      .then(() => {
+        // After deleting, fetch the updated list of posts
+        getData(setData);
+        console.log("red");
+        toast.success("Post deleted successfully!");
+      })
+      .catch((error) => {
+        console.error("Error deleting post:", error);
+        toast.error("Failed to delete post");
+      });
+  };
 
+  const isCurrentUser = postedBy === username;
 
   return (
     <div id="gallery">
@@ -81,13 +109,17 @@ function Post({
           <p className="line3">{category}</p>
         </div>
 
-        <div id="up-del-butts">
-          <Link to={`/posts/${_id}`}>
-            <button id="up">Update</button>
-          </Link>
-            <button id="del" onClick={() => handleDelete(_id)}>Delete</button>
-        </div>
-        <div id="flex-con">
+        {isCurrentUser && (
+          <div id="up-del-butts">
+            <Link to={`/posts/${_id}`}>
+              <button id="up">Update</button>
+            </Link>
+            <button id="del" onClick={() => handleDelete(_id)}>
+              Delete
+            </button>
+          </div>
+        )}
+        <div id="flex-con" onClick={(e) => handleLike(_id)}>
           <div id="like-con" onClick={toggleRotation}>
             <img
               className={rotate ? "rotate" : ""}
@@ -95,7 +127,7 @@ function Post({
               src={like}
               alt="like"
             />
-            <span>{likes}</span>
+            <span>{postLikes ? postLikes : 0}</span>
           </div>
         </div>
       </div>

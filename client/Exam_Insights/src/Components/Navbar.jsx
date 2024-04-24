@@ -6,17 +6,22 @@ import logout from "../assets/logout.png";
 import del from "../assets/delete.png";
 import { useState, useEffect, useRef } from "react";
 import { getCookie } from "./Cookies";
-import { Link, useNavigate } from "react-router-dom";
-
+import { Link, useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Navbar() {
   const [account, setShowAccount] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [userId, setUserId] = useState("");
   const nav = useNavigate();
+  const jwtToken = getCookie("jwtToken");
 
   const accountRef = useRef(null);
 
+  //display name and email from cookies
   useEffect(() => {
     const usernameFromCookie = getCookie("username");
     if (usernameFromCookie) {
@@ -28,31 +33,50 @@ function Navbar() {
     }
   }, []);
 
-  function handleLogout() {
-    document.cookie =
-      "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    document.cookie =
-      "email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    setUsername("");
-    setEmail("");
-    nav("/");
-  }
+  //get user id from backend to delete account
+  useEffect(() => {
+    if (jwtToken) {
+      axios
+        .get(`${import.meta.env.VITE_API_URL}user`, {
+          headers: { Authorization: `Bearer ${jwtToken}` },
+        })
+        .then((response) => {
+          const { userId } = response.data;
+          if (userId) {
+            setUserId(userId);
+          } else {
+            console.log("User ID not found in response");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+        });
+    } else {
+      console.log("JWT token not found. User not authenticated.");
+    }
+  }, [jwtToken]);
 
+
+  //handle popup closure on click
   const toggleAccount = () => {
     setShowAccount(!account);
   };
-
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (accountRef.current && !accountRef.current.contains(event.target)) {
+      const navbar = document.getElementById("navbar");
+      if (
+        navbar &&
+        !navbar.contains(event.target) &&
+        !accountRef.current.contains(event.target)
+      ) {
         setShowAccount(false);
       }
     };
 
+    //handle popup closure on mousedown
     const handleScroll = () => {
       setShowAccount(false);
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     window.addEventListener("scroll", handleScroll);
 
@@ -61,6 +85,31 @@ function Navbar() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [account]);
+
+  
+  //delete function
+  const handleDelete = (id) => {
+    axios
+      .delete(import.meta.env.VITE_API_URL + "users/" + id, {
+        headers: { authorization: `Bearer ${jwtToken}` },
+      })
+      .then(() => {
+        nav("/");
+        toast.success("Account deleted successfully!");
+      })
+      .catch((err) => console.log(err));
+  };
+
+  //logout function
+  function handleLogout() {
+    document.cookie =
+      "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    setUsername("");
+    setEmail("");
+    toast.success("Logged out successfully");
+    nav("/");
+  }
 
   return (
     <>
@@ -84,7 +133,13 @@ function Navbar() {
           >
             Contacts
           </a>
-          <div id="user" onClick={toggleAccount}></div>
+          <div id="user" onClick={toggleAccount}>
+            <img
+              id="avatar"
+              src={`https://api.dicebear.com/8.x/big-ears/svg?seed=${username}`}
+              alt="avatar"
+            />
+          </div>
         </div>
       </div>
       {account && (
@@ -94,15 +149,18 @@ function Navbar() {
             <p id="email">{email}</p>
           </div>
           <div id="bottom">
-            <div id="switch" className="butts">
-              <img src={change} alt="switch" />
-              <p>Switch</p>
-            </div>
-            <div id="logout" className="butts">
+            <div id="logout" className="butts" onClick={handleLogout}>
               <img src={logout} alt="logout" />
-              <p onClick={handleLogout}>Logout</p>
+              <p>Logout</p>
             </div>
-            <div id="delete" className="butts">
+
+            <div
+              id="delete"
+              className="butts"
+              onClick={(e) => {
+                handleDelete(userId);
+              }}
+            >
               <img src={del} alt="switch" />
               <p>Delete</p>
             </div>
