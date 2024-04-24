@@ -16,8 +16,7 @@ The project aims to explore the different beliefs, ideas and tricks students oft
 ### **Features**
 - List of thoughts that come to mind before exam nights.
 - The fact behind every thought with pictorial description.
-- A mobile Responsive project.
-- A Login page for users.
+- A dedicated Login/Signup page for users.
 - A platform to add and edit own experiences.
-- Enability to share every thought and fact to others.
-- Ability to Share every thought and fact behind it to others.
+- Option to create and delete multiple accounts.
+- Strong Backend Validation for security of personal data.
