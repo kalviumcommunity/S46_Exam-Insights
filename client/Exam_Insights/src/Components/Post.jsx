@@ -11,7 +11,7 @@ import { getData } from "../Pages/Home";
 
 function Post({
   category,
-  element,
+  title,
   expectation,
   imageLink,
   likes,
@@ -85,7 +85,7 @@ function Post({
     <div id="gallery">
       <div className="card"></div>
       <div className="bg">
-        <p id="title">{element}</p>
+        <p id="title">{title}</p>
         <div id="creator">
           - <span>{postedBy}</span>
         </div>
