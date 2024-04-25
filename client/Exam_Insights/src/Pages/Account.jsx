@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const AuthComponent = () => {
   const [isSignIn, setIsSignIn] = useState(false);
+  const [isSigningUp, setIsSigningUp] = useState(false); // State to track signup process
 
   const toggleForm = () => {
     setIsSignIn(!isSignIn);
@@ -25,7 +26,9 @@ const AuthComponent = () => {
   const navigate = useNavigate();
 
   const handleSignup = async (data) => {
+    if (isSigningUp) return;  // Prevent multiple signups
     try {
+      setIsSigningUp(true);
       const response = await axios.post(
         import.meta.env.VITE_API_URL + "users",
         {
@@ -42,6 +45,8 @@ const AuthComponent = () => {
       navigate("/home");
     } catch (err) {
       toast.error(err.response.data.message);
+    } finally {
+      setIsSigningUp(false); 
     }
   };
 
