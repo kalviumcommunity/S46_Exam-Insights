@@ -14,7 +14,7 @@ const createToken = (payload) => {
     });
 };
 
-const authenticate = (req, res, next) => {
+const authenticate = (req, res, next) => { 
     const token = req.headers.authorization;
  
     if (!token || !token.startsWith('Bearer ')) {
