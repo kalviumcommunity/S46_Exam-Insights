@@ -156,6 +156,8 @@ router.post('/posts',authenticate, async (req, res) => {
     }
 });
 
+//Login for existing users
+
 router.post("/login", async (req, res) => {
     try {
         const { username, password } = req.body;
